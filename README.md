@@ -3,7 +3,7 @@ Remember when your teacher told you you won't always have a calculator, so you b
 
 CIDR notation helper; Subnet divisor helper; Built in Go with Cobra and Viper;
 
-##TODO:
+## TODO:
 - start project
 - add print CIDR cheatsheet-esque table
   - really just some extra --help functionality
