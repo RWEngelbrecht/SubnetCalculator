@@ -30,10 +30,23 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "SubnetCalculator",
 	Short: "Helps you split your network into subnets right in the terminal",
-	Long: `SubnetCalculator basic takes a base IP and a divisor, and gives you the 
+	Long: `	SubnetCalculator basically takes a base IP and a divisor, and gives you the 
 	CIDR notation for subnets in that network, as well as subnet masks.
 	
-	Might also do some other things, who knows?`,
+	Might also do some other things, who knows?
+	
+	CIDR notation table for quick reference:
+	 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+	| CIDR |    Subnet Mask    | Nr of Addresses |
+	|¯¯¯¯¯¯|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|
+	|  /0  |  0.0.0.0          |  4,294,967,296  |
+	|  /8  |  255.0.0.0        |  16,777,216     |
+	|  /16 |  255.255.0.0      |  65,536         |
+	|  /24 |  255.255.255.0    |  256            |
+	|  /32 |  255.255.255.255  |  1              |
+	|      |                   |                 |
+	 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯`,
+
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },

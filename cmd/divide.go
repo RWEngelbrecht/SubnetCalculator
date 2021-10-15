@@ -22,8 +22,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-var address string
-
 // divideCmd represents the divide command
 var divideCmd = &cobra.Command{
 	Use:   "divide",
@@ -35,10 +33,16 @@ var divideCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("divide called")
 		if viper.IsSet("address") {
-			fmt.Print("address set: ", viper.GetString("address"))
+			fmt.Println("address set: ", viper.GetString("address"))
+		}
+		if viper.IsSet("divisor") {
+			fmt.Println("divisor set: ", viper.GetString("divisor"))
 		}
 	},
 }
+
+var address string
+var divisor int
 
 func init() {
 	rootCmd.AddCommand(divideCmd)
@@ -52,6 +56,8 @@ func init() {
 	// Local flag for command:
 	// add StringVarP flag for command
 	divideCmd.Flags().StringVarP(&address, "address", "a", "", "The base IP address to divide.")
+	divideCmd.Flags().IntVarP(&divisor, "divisor", "d", 1, "The amount of subnets to split network into.")
 	// bind Cobra pflag defined above with Viper
 	viper.BindPFlag("address", divideCmd.Flags().Lookup("address"))
+	viper.BindPFlag("divisor", divideCmd.Flags().Lookup("divisor"))
 }
