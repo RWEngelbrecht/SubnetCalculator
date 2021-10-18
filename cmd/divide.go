@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -29,15 +30,19 @@ var divideCmd = &cobra.Command{
 	Long: `Takes a base IP and a divisor and returns subnets in CIDR notation.
 	For example: 
 
-		APPNAME COMMAND ARG ARG --FLAG`,
+		APPNAME COMMAND -a ADDRESS -d DIVISOR`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("divide called")
-		if viper.IsSet("address") {
-			fmt.Println("address set: ", viper.GetString("address"))
+		if !viper.IsSet("address") {
+			fmt.Println("Something went horribly wrong...")
+			return
 		}
-		if viper.IsSet("divisor") {
-			fmt.Println("divisor set: ", viper.GetString("divisor"))
-		}
+		// max subnets: 2^(32-routing_prefix)
+		// max addresses: 2^(32-routing_prefix) - 2
+		fmt.Println("address set: ", viper.GetString("address"))
+		fmt.Println("divisor set: ", viper.GetString("divisor"))
+		address := viper.GetString("address")
+		address_parts := strings.Split(address, ".")
+		fmt.Println(address_parts)
 	},
 }
 
