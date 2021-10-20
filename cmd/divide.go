@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -27,22 +28,47 @@ import (
 var divideCmd = &cobra.Command{
 	Use:   "divide",
 	Short: "Divide given IP into given divisor",
-	Long: `Takes a base IP and a divisor and returns subnets in CIDR notation.
+	Long: `Takes a network IP address and a divisor and returns subnets in CIDR notation.
 	For example: 
 
 		APPNAME COMMAND -a ADDRESS -d DIVISOR`,
 	Run: func(cmd *cobra.Command, args []string) {
+
 		if !viper.IsSet("address") {
-			fmt.Println("Something went horribly wrong...")
-			return
+			panic("Something went horribly wrong...")
 		}
+
 		// max subnets: 2^(32-routing_prefix)
 		// max addresses: 2^(32-routing_prefix) - 2
 		fmt.Println("address set: ", viper.GetString("address"))
 		fmt.Println("divisor set: ", viper.GetString("divisor"))
+
 		address := viper.GetString("address")
+
+		// check if standard 3 dots are in string
+		if strings.Count(address, ".") != 3 {
+			panic("That doesn't look like any IP address I've seen...")
+		}
+
+		// split IPv4 string into its 8 bit sections
 		address_parts := strings.Split(address, ".")
-		fmt.Println(address_parts)
+		address_binary := []string{}
+
+		// convert each section to binary
+		for _, part := range address_parts {
+			val, err := strconv.ParseInt(part, 10, 64)
+			if err != nil {
+				panic("That's no int...")
+			}
+			base2 := strconv.FormatInt(int64(val), 2)
+			// need to append 0s because base 2 int not always octet
+			for i := len(base2); i < 8; i++ {
+				base2 = "0" + base2
+			}
+			address_binary = append(address_binary, base2)
+		}
+		fmt.Println(address_binary)
+		// output slash cidr notation for each possible subnet mask?
 	},
 }
 
